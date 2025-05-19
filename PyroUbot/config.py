@@ -17,8 +17,8 @@ OWNER_ID = int(os.getenv("OWNER_ID", "5301377519"))
 
 BLACKLIST_CHAT = list(map(int, os.getenv("BLACKLIST_CHAT", " -1002356932965").split()))
 
-RMBG_API = os.getenv("RMBG_API", "R7x6khRga3psnfbFgpfwomB3")
+RMBG_API = os.getenv("RMBG_API", "no1RWHwRQwwF5XtBWufCpPck")
 
 MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://Johnathan:KontolXD#123@johnathansange.ggwewml.mongodb.net/?retryWrites=true&w=majority&appName=JohnathanSange")
 
-LOGS_MAKER_UBOT = int(os.getenv("LOGS_MAKER_UBOT", "-1002552768474"))
+LOGS_MAKER_UBOT = int(os.getenv("LOGS_MAKER_UBOT", "-1002504273075"))
