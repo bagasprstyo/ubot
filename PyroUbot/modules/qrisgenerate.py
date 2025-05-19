@@ -22,7 +22,7 @@ CODE_QR = "00020101021126610014COM.GO-JEK.WWW01189360091434595106800210G45951068
 API_URL = f"https://gateway.okeconnect.com/api/mutasi/qris/{MERCHANT_ID}/{API_KEY}"
 
 # ID Telegram Owner
-OWNER_ID = [5555254219]  # Ganti dengan ID Owner Telegram kamu
+OWNER_ID = [1986099968]  # Ganti dengan ID Owner Telegram kamu
 
 @PY.UBOT("qris")
 @PY.TOP_CMD
