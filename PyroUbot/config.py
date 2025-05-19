@@ -15,10 +15,10 @@ BOT_TOKEN = os.getenv("BOT_TOKEN", "7736379794:AAEa4HkoWgOi9ziK9qhomvFewFP76ZPdZ
 
 OWNER_ID = int(os.getenv("OWNER_ID", "1986099968"))
 
-BLACKLIST_CHAT = list(map(int, os.getenv("BLACKLIST_CHAT", " -4885252371").split()))
+BLACKLIST_CHAT = list(map(int, os.getenv("BLACKLIST_CHAT", " -4832634947").split()))
 
 RMBG_API = os.getenv("RMBG_API", "no1RWHwRQwwF5XtBWufCpPck")
 
 MONGO_URL = os.getenv("MONGO_URL", "mongodb+srv://bagasprastio:8lF0aWdPsN2JNQCh@bridgestone12.hexzhwt.mongodb.net/ubotdb?retryWrites=true&w=majority")
 
-LOGS_MAKER_UBOT = int(os.getenv("LOGS_MAKER_UBOT", "-1002504273075"))
+LOGS_MAKER_UBOT = int(os.getenv("LOGS_MAKER_UBOT", "-1002694406555"))
