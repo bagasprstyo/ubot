@@ -30,6 +30,9 @@ pip install speedtest-cli
 pip install yt-dlp
 ```
 ```
+pip install spotdl requests
+```
+```
 cp sample.env .env && nano .env
 ```
 ```
