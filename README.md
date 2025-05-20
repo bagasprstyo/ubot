@@ -21,6 +21,12 @@ python3 -m venv ubot && source ubot/bin/activate
 pip3 install -r requirements.txt
 ```
 ```
+pip install geopy qrcode[pil]
+```
+```
+pip install speedtest-cli
+```
+```
 cp sample.env .env && nano .env
 ```
 ```
