@@ -1,6 +1,7 @@
 from pyrogram import Client, filters
 import requests
 import os
+import re
 from PyroUbot import *
 
 __MODULE__ = "sᴘᴏᴛɪғʏ"
@@ -12,71 +13,71 @@ __HELP__ = """
 ⊶ Mendownload Music Yang Di Inginkan.</b></blockquote>
 """
 
+# Isi cookie sp_dc kamu di sini (dari browser)
+SPOTIFY_COOKIES = {
+    "sp_dc": "ISI_COOKIE_SP_DC_KAMU"
+}
+
 @PY.UBOT("spotify")
 async def spotify_search(client, message):
     query = " ".join(message.command[1:])
     if not query:
         await message.reply_text("Gunakan format: /spotify <judul lagu>")
         return
-    
+
     proses_msg = await message.reply_text("🔎 Mencari lagu...")
-    search_url = f"https://api.botcahx.eu.org/api/search/spotify?query={query}&apikey=moire"
-    search_response = requests.get(search_url).json()
-    
-    if not search_response["status"] or not search_response["result"]["status"]:
-        await proses_msg.edit_text("Gagal mencari lagu.")
+
+    # --- Cari track URL dari Spotify web ---
+    headers = {
+        "User-Agent": "Mozilla/5.0",
+        "Accept": "text/html",
+    }
+    search_url = f"https://open.spotify.com/search/{query.replace(' ', '%20')}"
+    resp = requests.get(search_url, headers=headers, cookies=SPOTIFY_COOKIES)
+    if resp.status_code != 200:
+        await proses_msg.edit_text(f"Gagal ambil data dari Spotify: {resp.status_code}")
         return
-    
-    tracks = search_response["result"]["data"]
-    if not tracks:
+
+    # Cari track id pertama
+    match = re.search(r'/track/([a-zA-Z0-9]+)', resp.text)
+    if not match:
         await proses_msg.edit_text("Tidak ditemukan hasil untuk pencarian tersebut.")
         return
-    
-    track_url = tracks[0]["url"]
-    
-    await proses_msg.edit_text("👅 Mengunduh lagu...")
-    
-    download_url = f"https://api.botcahx.eu.org/api/download/spotify?url={track_url}&apikey=moire"
-    download_response = requests.get(download_url).json()
-    
-    if not download_response["status"]:
-        await proses_msg.edit_text("Gagal mengunduh lagu.")
+
+    track_id = match.group(1)
+    track_url = f"https://open.spotify.com/track/{track_id}"
+
+    await proses_msg.edit_text(f"👅 Mengunduh lagu...\n{track_url}")
+
+    # --- Download lagu dengan spotdl ---
+    # File akan terdownload di direktori berjalan
+    prev_files = set(os.listdir('.'))
+    exit_code = os.system(f'spotdl "{track_url}"')
+    if exit_code != 0:
+        await proses_msg.edit_text("Gagal mengunduh lagu dengan spotDL.")
         return
-    
-    data = download_response["result"]["data"]
-    file_url = data["url"]
-    track_title = data["title"]
-    track_duration = data["duration"]
-    artist_name = data["artist"]["name"]
-    spotify_url = data["artist"]["external_urls"]["spotify"]
-    
-    user_id = message.from_user.id
-    audio_path = f"downloaded_audio_{user_id}.mp3"
-    
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
-    }
-    
-    response = requests.get(file_url, headers=headers, stream=True)
-    if response.status_code != 200:
-        await proses_msg.edit_text("Gagal mengunduh lagu. Server menolak permintaan (403 Forbidden).")
+
+    # Cari file baru (hasil download)
+    new_files = set(os.listdir('.')) - prev_files
+    audio_path = None
+    for file in new_files:
+        if file.lower().endswith(('.mp3', '.m4a', '.flac', '.ogg')):
+            audio_path = file
+            break
+
+    if not audio_path or not os.path.exists(audio_path):
+        await proses_msg.edit_text("Gagal menemukan file audio hasil download.")
         return
-    
-    with open(audio_path, "wb") as file:
-        for chunk in response.iter_content(1024):
-            file.write(chunk)
-    
-    caption = (f"🎵 <b>{track_title}</b>\n"
-               f"👤 Artist: {artist_name}\n"
-               f"⏳ Durasi: {track_duration}\n"
-               f"🔗 <a href='{spotify_url}'>Dengarkan di Spotify</a>")
-    
+
+    # Info untuk caption
+    title = audio_path.replace('.mp3','').replace('-',' ').replace('_',' ')
+    caption = f"🎵 <b>{title}</b>\n🔗 <a href='{track_url}'>Dengarkan di Spotify</a>"
+
     await client.send_audio(
         chat_id=message.chat.id,
         audio=audio_path,
-        title=track_title,
         caption=caption
     )
-    
-    os.remove(audio_path)    
+
+    os.remove(audio_path)
     await proses_msg.delete()
