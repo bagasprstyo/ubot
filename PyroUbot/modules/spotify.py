@@ -15,7 +15,7 @@ __HELP__ = """
 
 # Isi cookie sp_dc kamu di sini (dari browser)
 SPOTIFY_COOKIES = {
-    "sp_dc": "ISI_COOKIE_SP_DC_KAMU"
+    "sp_dc": "AQAK-oeJHwONf-JVPnMtmgaZgZPmaTuPVWJY8CW1kyBlYy8JW2pl0uwkqfzfMtzzdn76C-uowuZ7v-aNEIQu8cjDw9uLNjKXoXngu5nx34ydpk5uiIY_oU7dLkq5k9aSGdday8US9EIB791C7R91uGvAlvhdNwJJNx9UUUcskZMgB37IQa9TfnLDqjE6bOrcZdkWMXAY7brBZjAD7Q"
 }
 
 @PY.UBOT("spotify")
