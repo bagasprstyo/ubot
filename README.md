@@ -27,6 +27,9 @@ pip install geopy qrcode[pil]
 pip install speedtest-cli
 ```
 ```
+pip install yt-dlp
+```
+```
 cp sample.env .env && nano .env
 ```
 ```
