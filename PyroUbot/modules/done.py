@@ -1,5 +1,5 @@
 import asyncio
-import datetime
+from datetime import datetime, timedelta, timezone
 
 from PyroUbot import *
 
@@ -9,9 +9,7 @@ __HELP__ = """
 
 • <b>Perintah</b> : <code>{0}done</code> <b>[name item],[harga] [pembayaran]</b>
 • <b>Penjelasan : konfirmasi pembayaran.</b></blockquote>
-
 """
-
 
 @PY.UBOT("done")
 async def done_command(client, message):
@@ -24,7 +22,6 @@ async def done_command(client, message):
             return
 
         parts = args[1].split(",", 2)
-
         if len(parts) < 2:
             await message.reply_text("<blockquote>Penggunaan: .done name item,price,payment</blockquote>")
             return
@@ -32,7 +29,12 @@ async def done_command(client, message):
         name_item = parts[0].strip()
         price = parts[1].strip()
         payment = parts[2].strip() if len(parts) > 2 else "Lainnya"
-        time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+        # Waktu WIB (UTC+7)
+        wib = timezone(timedelta(hours=7))
+        now_wib = datetime.now(wib)
+        time = now_wib.strftime("%Y-%m-%d %H:%M:%S") + " WIB"
+
         response = (
             f"<blockquote>「 𝗧𝗥𝗔𝗡𝗦𝗔𝗞𝗦𝗜 𝗕𝗘𝗥𝗛𝗔𝗦𝗜𝗟 」\n</blockquote>"
             f"<blockquote>📦 <b>ʙᴀʀᴀɴɢ : {name_item}</b>\n"
