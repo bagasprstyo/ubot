@@ -30,8 +30,8 @@ async def done_command(client, message):
         price = parts[1].strip()
         payment = parts[2].strip() if len(parts) > 2 else "Lainnya"
 
-        # Waktu WIB (UTC+7)
-        wib = timezone(timedelta(hours=7))
+        # di dalam fungsi done_command
+        wib = timezone(timedelta(hours=7))  # <--- Tidak ada .upper() di sini!
         now_wib = datetime.now(wib)
         time = now_wib.strftime("%Y-%m-%d %H:%M:%S") + " WIB"
 
